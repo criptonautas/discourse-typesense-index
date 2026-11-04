@@ -218,6 +218,14 @@ RSpec.describe TypesenseIndexer, ".localized_documents" do
     expect(described_class.localized_documents(post.reload).first[:title]).to eq("Translated title")
   end
 
+  it "titles a post in another language than its topic with the title's translation" do
+    post.topic.update!(locale: "es")
+    post.update!(locale: "en")
+    expect(described_class.document(post.reload)[:title]).to eq(post.topic.title)
+    translate_title(post.topic, "en", "Translated title")
+    expect(described_class.document(post.reload)[:title]).to eq("Translated title")
+  end
+
   it "files a regional translation under its language" do
     translate(post, "pt_BR")
     expect(described_class.localized_documents(post.reload).first).to include(
