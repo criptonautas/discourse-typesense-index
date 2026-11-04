@@ -137,7 +137,7 @@ module ::TypesenseIndexer
       id: post.id.to_s,
       topic_id: topic.id,
       post_number: post.post_number,
-      title: topic.title,
+      title: title(topic, locale(post)),
       text: SearchIndexer::HtmlScrubber.scrub(post.cooked),
       url: post.full_url,
       username: post.user&.username.to_s,
@@ -164,6 +164,13 @@ module ::TypesenseIndexer
     (value.presence || SiteSetting.default_locale).to_s.split(/[-_]/).first
   end
 
+  # The topic's title in a document's language: a reply in English under a Spanish title
+  # takes the title's English translation, when there is one.
+  def self.title(topic, locale)
+    return topic.title if primary_locale(topic.locale) == locale
+    topic.localizations.find { |l| primary_locale(l.locale) == locale }&.title.presence || topic.title
+  end
+
   def self.localized_id(post_id, locale)
     "#{post_id}-#{locale}"
   end
@@ -173,17 +180,16 @@ module ::TypesenseIndexer
   def self.localized_documents(post, hidden_tags = DiscourseTagging.hidden_tag_names)
     return [] if !SiteSetting.content_localization_enabled
 
-    titles = post.topic.localizations.index_by(&:locale)
     post.localizations.filter_map do |localization|
       next if primary_locale(localization.locale) == locale(post)
-      localized_document(post, localization, titles[localization.locale], hidden_tags)
+      localized_document(post, localization, hidden_tags)
     end
   end
 
-  def self.localized_document(post, localization, topic_localization, hidden_tags)
+  def self.localized_document(post, localization, hidden_tags)
     document(post, hidden_tags).merge(
       id: localized_id(post.id, localization.locale),
-      title: topic_localization&.title.presence || post.topic.title,
+      title: title(post.topic, primary_locale(localization.locale)),
       text: SearchIndexer::HtmlScrubber.scrub(localization.cooked),
       locale: primary_locale(localization.locale),
     )
