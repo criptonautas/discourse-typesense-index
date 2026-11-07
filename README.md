@@ -78,7 +78,7 @@ Grouping by `topic_id`, as above, keeps one row per discussion.
 ## Setup
 
 1. Add to `app.yml` and rebuild:
-   `- git clone https://github.com/somos-criptonautas/discourse-typesense-index.git`
+   `- git clone https://github.com/criptonautas/discourse-typesense-index.git`
 2. Set `typesense_url` and `typesense_api_key`, then enable `typesense_indexer_enabled`.
    The first build starts automatically. `rake typesense:rebuild` runs one by hand.
 3. Create a search-only key for the frontend:

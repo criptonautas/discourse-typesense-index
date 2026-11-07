@@ -78,7 +78,7 @@ el idioma que muestra. Una traducción al idioma del propio post no agrega nada.
 ## Puesta en marcha
 
 1. Añade a `app.yml` y reconstruye:
-   `- git clone https://github.com/somos-criptonautas/discourse-typesense-index.git`
+   `- git clone https://github.com/criptonautas/discourse-typesense-index.git`
 2. Configura `typesense_url` y `typesense_api_key`, y activa `typesense_indexer_enabled`.
    La primera construcción arranca sola. `rake typesense:rebuild` lanza una a mano.
 3. Crea una clave solo de búsqueda para el frontend:

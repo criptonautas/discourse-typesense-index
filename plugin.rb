@@ -4,7 +4,7 @@
 # about: Keeps a self-hosted Typesense collection in sync with public Discourse posts
 # version: 0.1.0
 # authors: Criptonautas
-# url: https://github.com/somos-criptonautas/discourse-typesense-index
+# url: https://github.com/criptonautas/discourse-typesense-index
 
 enabled_site_setting :typesense_indexer_enabled
 
