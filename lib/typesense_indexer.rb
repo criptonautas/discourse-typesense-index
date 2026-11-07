@@ -168,7 +168,8 @@ module ::TypesenseIndexer
   # takes the title's English translation, when there is one.
   def self.title(topic, locale)
     return topic.title if primary_locale(topic.locale) == locale
-    topic.localizations.find { |l| primary_locale(l.locale) == locale }&.title.presence || topic.title
+    topic.localizations.find { |l| primary_locale(l.locale) == locale }&.title.presence ||
+      topic.title
   end
 
   def self.localized_id(post_id, locale)
